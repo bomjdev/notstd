@@ -2,12 +2,22 @@ package notstd
 
 type Set[T comparable] map[T]struct{}
 
+type KeyFn[T any, K comparable] func(T) K
+
 func NewSet[T comparable](slice Slice[T]) Set[T] {
 	set := make(Set[T], len(slice))
 	for _, s := range slice {
 		set[s] = struct{}{}
 	}
 	return set
+}
+
+func NewSetFunc[T any, K comparable](slice Slice[T], keyFn KeyFn[T, K]) Set[K] {
+	s := make(Set[K], len(slice))
+	for _, v := range slice {
+		s.Add(keyFn(v))
+	}
+	return s
 }
 
 func (s Set[T]) Add(v T) {
