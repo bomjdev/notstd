@@ -1,5 +1,5 @@
 package notstd
 
-func Unique[T comparable](slice Slice[T]) Slice[T] {
+func Unique[T comparable, S ~[]T](slice S) S {
 	return NewSet(slice).Slice()
 }

@@ -4,7 +4,7 @@ type Set[T comparable] map[T]struct{}
 
 type KeyFn[T any, K comparable] func(T) K
 
-func NewSet[T comparable](slice Slice[T]) Set[T] {
+func NewSet[T comparable, S ~[]T](slice S) Set[T] {
 	set := make(Set[T], len(slice))
 	for _, s := range slice {
 		set[s] = struct{}{}
@@ -86,7 +86,7 @@ func (s Set[T]) Difference(s2 Set[T]) Set[T] {
 	return ret
 }
 
-func (s Set[T]) Slice() Slice[T] {
+func (s Set[T]) Slice() []T {
 	ret := make(Slice[T], 0, len(s))
 	for k := range s {
 		ret = append(ret, k)

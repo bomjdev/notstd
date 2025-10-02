@@ -1,8 +1,6 @@
 package notstd
 
-type FilterFn[T any] func(v T) bool
-
-func Filter[T any](slice Slice[T], fn FilterFn[T]) Slice[T] {
+func Filter[T any, S ~[]T](slice S, fn FilterFn[T]) S {
 	ret := make([]T, 0, len(slice))
 	for _, s := range slice {
 		if fn(s) {
@@ -12,8 +10,8 @@ func Filter[T any](slice Slice[T], fn FilterFn[T]) Slice[T] {
 	return ret
 }
 
-func NewSliceFilter[T any](fn FilterFn[T]) func(Slice[T]) Slice[T] {
-	return func(slice Slice[T]) Slice[T] {
+func NewSliceFilter[T any, S ~[]T](fn FilterFn[T]) func(S) S {
+	return func(slice S) S {
 		return Filter(slice, fn)
 	}
 }
