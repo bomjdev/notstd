@@ -41,3 +41,43 @@ func AllFilter[T any](fns ...FilterFn[T]) FilterFn[T] {
 		return true
 	}
 }
+
+func NilOrFilter[T any](fn FilterFn[T]) FilterFn[*T] {
+	return func(v *T) bool {
+		if v == nil {
+			return true
+		}
+		return fn(*v)
+	}
+}
+
+func NotNilAndFilter[T any](fn FilterFn[T]) FilterFn[*T] {
+	return func(v *T) bool {
+		if v == nil {
+			return false
+		}
+		return fn(*v)
+	}
+}
+
+func GetterFilter[T, V any](getter func(T) V, fn FilterFn[V]) FilterFn[T] {
+	return func(v T) bool {
+		return fn(getter(v))
+	}
+}
+
+func GetterFilterFactory[T, V any](getter func(T) V) func(FilterFn[V]) FilterFn[T] {
+	return func(fn FilterFn[V]) FilterFn[T] {
+		return func(v T) bool {
+			return fn(getter(v))
+		}
+	}
+}
+
+func NilGetterFilter[T, V any](getter func(T) *V, fn FilterFn[V]) FilterFn[T] {
+	return func(v T) bool {
+		return NilOrFilter(fn)(getter(v))
+	}
+}
+
+type FilterFactory[T, V any] func(fn FilterFn[V]) FilterFn[T]
