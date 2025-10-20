@@ -12,7 +12,7 @@ func NewSet[T comparable, S ~[]T](slice S) Set[T] {
 	return set
 }
 
-func NewSetFunc[T any, K comparable](slice Slice[T], keyFn KeyFn[T, K]) Set[K] {
+func NewSetFunc[T any, K comparable, S ~[]T](slice S, keyFn KeyFn[T, K]) Set[K] {
 	s := make(Set[K], len(slice))
 	for _, v := range slice {
 		s.Add(keyFn(v))
@@ -87,7 +87,7 @@ func (s Set[T]) Difference(s2 Set[T]) Set[T] {
 }
 
 func (s Set[T]) Slice() []T {
-	ret := make(Slice[T], 0, len(s))
+	ret := make([]T, 0, len(s))
 	for k := range s {
 		ret = append(ret, k)
 	}
