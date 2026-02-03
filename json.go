@@ -12,3 +12,11 @@ func PrettyJSON[T any](v T) string {
 	}
 	return string(data)
 }
+
+func PrettifyRawJSON(data []byte) (string, error) {
+	var v json.RawMessage
+	if err := json.Unmarshal(data, &v); err != nil {
+		return "", err
+	}
+	return PrettyJSON(v), nil
+}
