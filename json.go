@@ -6,7 +6,11 @@ import (
 )
 
 func PrettyJSON[T any](v T) string {
-	data, err := json.MarshalIndent(v, "", "  ")
+	return PrettyJSONIndent(v, "\t")
+}
+
+func PrettyJSONIndent[T any](v T, indent string) string {
+	data, err := json.MarshalIndent(v, "", indent)
 	if err != nil {
 		return fmt.Sprintf("error marshaling %T to json: %s", v, err)
 	}
